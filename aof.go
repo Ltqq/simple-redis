@@ -25,7 +25,7 @@ func NewAof(path string) (*Aof, error) {
 		rd:   bufio.NewReader(f),
 	}
 
-	// Start a goroutine to sync AOF to disk every 1 second
+	// 启动一个协程，每1秒将AOF同步到磁盘
 	go func() {
 		for {
 			aof.mu.Lock()

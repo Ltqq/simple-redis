@@ -64,20 +64,20 @@ func (r *Resp) readArray() (Value, error) {
 	v := Value{}
 	v.typ = "array"
 
-	// read length of array
+	//读数组的长度
 	len, _, err := r.readInteger()
 	if err != nil {
 		return v, err
 	}
 
-	// foreach line, parse and read the value
+	// 对于每一行，解析并读取值
 	v.array = make([]Value, 0)
 	for i := 0; i < len; i++ {
 		val, err := r.Read()
 		if err != nil {
 			return v, err
 		}
-		// append parsed value to array
+		//将解析后的值追加到数组
 		v.array = append(v.array, val)
 	}
 
@@ -88,7 +88,7 @@ func (r *Resp) readBulk() (Value, error) {
 	v := Value{}
 	v.typ = "bulk"
 
-	// read length of string
+	//读取字符串的长度
 	len, _, err := r.readInteger()
 	if err != nil {
 		return v, err
@@ -97,7 +97,7 @@ func (r *Resp) readBulk() (Value, error) {
 	var bulk = make([]byte, len)
 	r.reader.Read(bulk)
 	v.bulk = string(bulk)
-	// 在读取字符串后调用读取每个批量字符串后面的 '\r\n'。如果我们不这样做，指针将留在 '\r' 处，Read 方法将无法正确读取下一个批量字符串。
+	// 在读取字符串后调用读取每个批量字符串后面的 '\r\n'。如果不这样，指针将留在 '\r' 处，Read 方法将无法正确读取下一个批量字符串。
 	r.readLine()
 	return v, nil
 }

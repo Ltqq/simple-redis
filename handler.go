@@ -2,6 +2,7 @@ package main
 
 import "sync"
 
+// Handlers 注册命令
 var Handlers = map[string]func([]Value) Value{
 	"PING":    ping,
 	"SET":     set,
